@@ -24,7 +24,10 @@ public class MathController {
     }
     @GetMapping("/divide/{m}/by/{n}")
     @ResponseBody
-    public int divide(@PathVariable int m, @PathVariable int n) {
-        return m / n;
+    public String divide(@PathVariable int m, @PathVariable int n) {
+        if ( n == 0) {
+            return "Error";
+        }
+        return String.valueOf(m / n);
     }
 }
