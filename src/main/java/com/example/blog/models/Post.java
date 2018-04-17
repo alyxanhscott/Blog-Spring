@@ -1,3 +1,5 @@
+package com.example.blog.models;
+
 public class Post {
 
     private String title;
