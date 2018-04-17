@@ -16,4 +16,10 @@ public class HelloWorldController {
     public String lights() {
         return "Lights on";
     }
+
+    @GetMapping("/hello/{firstName}/{lastName}")
+    @ResponseBody
+    public String sayHello2(@PathVariable String firstName, @PathVariable String lastName) {
+            return "Hola, " + firstName + " " + lastName;
+        }
 }
