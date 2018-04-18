@@ -31,6 +31,12 @@ public class PostSvc {
         return posts.get((int) id - 1);
     }
 
+    public void edit(long id, Post post) {
+        posts.get((int)id).setTitle(post.getTitle());
+        posts.get((int)id).setBody(post.getBody());
+
+    }
+
     public void createPosts() {
         save(new Post("Coding Coding Coding...", "Always Coding, always thriving on caffeine."));
         save(new Post("Shinedown 2018!", "Shinedown was awesome as always!"));

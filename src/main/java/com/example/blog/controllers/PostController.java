@@ -51,4 +51,16 @@ public class PostController {
         return "redirect:/posts";
     }
 
+    @GetMapping("/posts/{id}/edit")
+    public String mapCreate(Model model, @PathVariable long id) {
+        model.addAttribute("post", pstSvc.onePost(id));
+        return "posts/edit";
+    }
+    @PostMapping("/posts/{id}/edit")
+    public String edit(@ModelAttribute Post edit, @PathVariable int id) {
+//        where post is edited
+        pstSvc.edit(id, edit);
+        return "redirect:/posts";
+    }
+
 }
