@@ -1,5 +1,6 @@
 package com.example.blog.controllers;
 import com.example.blog.models.Post;
+import com.example.blog.services.PostSvc;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.geometry.Pos;
 import org.springframework.stereotype.Controller;
@@ -17,32 +18,30 @@ import java.util.List;
 @Controller
 public class PostController {
 
-    List<Post> post = Arrays.asList(
-            new Post("Coding Coding Coding...", "Always Coding, always thriving on caffeine."),
-            new Post("Shinedown 2018!", "Shinedown was awesome as always!"),
-            new Post("Guinea Piggies!", "Insert something about your guineas here...")
-    );
+    private final PostSvc pstSvc;
+
+    public PostController(PostSvc pstSvc) {
+        this.pstSvc = pstSvc;
+    }
 
     @GetMapping("/posts")
-    public String posts(Model model) {
-        model.addAttribute("Posts", post);
+    public String posts( Model model) {
+        List<Post> all = pstSvc.allPosts();
+        model.addAttribute("Posts", all);
         return "posts/index";
     }
 
     @GetMapping("/posts/{id}")
-    @ResponseBody
     public String postId(@PathVariable int id, Model model) {
-        Post post = new Post("Test post", "test describe");
-        model.addAttribute("post", post);
+        Post onePost = pstSvc.onePost(id);
+        model.addAttribute("post", onePost);
         return "/posts/show";
     }
     @GetMapping("/posts/create")
-    @ResponseBody
     public String createGet() {
         return "Form for creating a post(Get)";
     }
     @PostMapping("/posts/create")
-    @ResponseBody
     public String createPost() {
         return "Create a post here(com.example.blog.models.Post)";
     }

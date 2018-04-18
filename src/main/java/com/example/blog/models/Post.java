@@ -4,6 +4,8 @@ public class Post {
 
     private String title;
     private String body;
+    private Long id;
+
 
     public Post() {
 
@@ -28,5 +30,13 @@ public class Post {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
