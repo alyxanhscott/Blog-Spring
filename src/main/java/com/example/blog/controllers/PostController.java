@@ -5,10 +5,7 @@ import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.geometry.Pos;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -26,6 +23,7 @@ public class PostController {
 
     @GetMapping("/posts")
     public String posts( Model model) {
+//        retrieves all posts
         List<Post> all = pstSvc.allPosts();
         model.addAttribute("Posts", all);
         return "posts/index";
@@ -33,17 +31,24 @@ public class PostController {
 
     @GetMapping("/posts/{id}")
     public String postId(@PathVariable int id, Model model) {
+//        retrieves one single post
         Post onePost = pstSvc.onePost(id);
         model.addAttribute("post", onePost);
         return "/posts/show";
     }
+
     @GetMapping("/posts/create")
-    public String createGet() {
-        return "Form for creating a post(Get)";
+    public String createGet( Model view) {
+//        redirect to create form
+        view.addAttribute("newPost", new Post());
+        return "/posts/create";
     }
+
     @PostMapping("/posts/create")
-    public String createPost() {
-        return "Create a post here(com.example.blog.models.Post)";
+    public String createPost(@ModelAttribute Post newPost) {
+//        where post is submitted
+        pstSvc.save(newPost);
+        return "redirect:/posts";
     }
 
 }
