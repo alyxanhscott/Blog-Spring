@@ -1,5 +1,6 @@
 package com.example.blog.controllers;
 import com.example.blog.models.Post;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.geometry.Pos;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,11 +29,12 @@ public class PostController {
         return "posts/index";
     }
 
-
     @GetMapping("/posts/{id}")
     @ResponseBody
-    public String postId(@PathVariable int id) {
-        return "post at id#: " + id;
+    public String postId(@PathVariable int id, Model model) {
+        Post post = new Post("Test post", "test describe");
+        model.addAttribute("post", post);
+        return "/posts/show";
     }
     @GetMapping("/posts/create")
     @ResponseBody
