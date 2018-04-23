@@ -33,14 +33,14 @@ public class PostController {
 //        retrieves one single post
         Post onePost = pstSvc.onePost(id);
         model.addAttribute("post", onePost);
-        return "/posts/show";
+        return "posts/show";
     }
 
     @GetMapping("/posts/create")
     public String createGet( Model view) {
 //        redirect to create form
         view.addAttribute("newPost", new Post());
-        return "/posts/create";
+        return "posts/create";
     }
 
     @PostMapping("/posts/create")
