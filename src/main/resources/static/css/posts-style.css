@@ -1,0 +1,48 @@
+* {
+    font-family: AppleGothic;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.nav {
+    font-size: 1.5em;
+    text-align: center;
+    margin: 0;
+    padding: 1em 0 1em 0;
+    text-shadow: #1b6d52 3px 3px 3px;
+    background-color: rgba(248, 244, 200, 0.64);
+}
+
+.nav-ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    list-style-type: none;
+}
+
+#all{
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+#create {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.posts-title {
+    margin-top: 2em;
+}
+
+.post-body {
+    margin-top: 2em;
+}
+
+.post-title {
+    font-size: 1.3em;
+}
+
+.post-description {
+
+}
