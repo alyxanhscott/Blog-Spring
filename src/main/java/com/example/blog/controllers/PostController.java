@@ -1,14 +1,14 @@
 package com.example.blog.controllers;
 import com.example.blog.models.Post;
+import com.example.blog.services.PostSvc;
+import com.example.blog.services.UserSvc;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.geometry.Pos;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.bind.annotation.*;
+import com.example.blog.models.UserRepository;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,34 +17,57 @@ import java.util.List;
 @Controller
 public class PostController {
 
-    List<Post> post = Arrays.asList(
-            new Post("Coding Coding Coding...", "Always Coding, always thriving on caffeine."),
-            new Post("Shinedown 2018!", "Shinedown was awesome as always!"),
-            new Post("Guinea Piggies!", "Insert something about your guineas here...")
-    );
+    private final UserSvc usrSvc;
+    private final PostSvc pstSvc;
+
+    @Autowired
+    public PostController(PostSvc pstSvc, UserSvc usrSvc) {
+        this.pstSvc = pstSvc;
+        this.usrSvc = usrSvc;
+    }
 
     @GetMapping("/posts")
-    public String posts(Model model) {
-        model.addAttribute("Posts", post);
+    public String posts( Model model) {
+//        retrieves all posts
+        Iterable<Post> all = pstSvc.findAll();
+        model.addAttribute("Posts", all);
         return "posts/index";
     }
 
     @GetMapping("/posts/{id}")
-    @ResponseBody
     public String postId(@PathVariable int id, Model model) {
-        Post post = new Post("Test post", "test describe");
-        model.addAttribute("post", post);
+//        retrieves one single post
+        Post onePost = pstSvc.onePost(id);
+        model.addAttribute("post", onePost);
         return "/posts/show";
     }
+
     @GetMapping("/posts/create")
-    @ResponseBody
-    public String createGet() {
-        return "Form for creating a post(Get)";
+    public String createGet( Model view) {
+//        redirect to create form
+        view.addAttribute("newPost", new Post());
+        return "/posts/create";
     }
+
     @PostMapping("/posts/create")
-    @ResponseBody
-    public String createPost() {
-        return "Create a post here(com.example.blog.models.Post)";
+    public String createPost(@ModelAttribute Post newPost) {
+//        where post is submitted
+        newPost.setUser(usrSvc.oneUser(1));
+        pstSvc.save(newPost);
+
+        return "redirect:/posts";
+    }
+
+    @GetMapping("/posts/{id}/edit")
+    public String mapCreate(Model model, @PathVariable long id) {
+        model.addAttribute("post", pstSvc.onePost(id));
+        return "posts/edit";
+    }
+    @PostMapping("/posts/{id}/edit")
+    public String edit(@ModelAttribute Post edit, @PathVariable int id) {
+//        where post is edited
+        pstSvc.edit(id, edit);
+        return "redirect:/posts";
     }
 
 }

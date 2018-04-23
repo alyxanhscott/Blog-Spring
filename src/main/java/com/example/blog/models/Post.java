@@ -1,17 +1,48 @@
 package com.example.blog.models;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Post")
 public class Post {
 
+    @Column(nullable = false, length = 100)
     private String title;
+
+    @Column(nullable = false)
     private String body;
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @OneToOne
+    private User user;
+
 
     public Post() {
 
     }
 
-    public Post(String title, String body) {
+    public Post(Long id, String title, String body, User user) {
         this.title = title;
         this.body = body;
+        this.user = user;
+        this.id = id;
+    }
+
+    public Post(String title, String body, User user) {
+        this.title = title;
+        this.body = body;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getTitle() {
@@ -28,5 +59,13 @@ public class Post {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
