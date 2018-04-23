@@ -1,12 +1,14 @@
 package com.example.blog.controllers;
 import com.example.blog.models.Post;
 import com.example.blog.services.PostSvc;
+import com.example.blog.services.UserSvc;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.geometry.Pos;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import com.example.blog.models.UserRepository;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,16 +17,19 @@ import java.util.List;
 @Controller
 public class PostController {
 
+    private final UserSvc usrSvc;
     private final PostSvc pstSvc;
 
-    public PostController(PostSvc pstSvc) {
+    @Autowired
+    public PostController(PostSvc pstSvc, UserSvc usrSvc) {
         this.pstSvc = pstSvc;
+        this.usrSvc = usrSvc;
     }
 
     @GetMapping("/posts")
     public String posts( Model model) {
 //        retrieves all posts
-        List<Post> all = pstSvc.allPosts();
+        Iterable<Post> all = pstSvc.findAll();
         model.addAttribute("Posts", all);
         return "posts/index";
     }
@@ -47,7 +52,9 @@ public class PostController {
     @PostMapping("/posts/create")
     public String createPost(@ModelAttribute Post newPost) {
 //        where post is submitted
+        newPost.setUser(usrSvc.oneUser(1));
         pstSvc.save(newPost);
+
         return "redirect:/posts";
     }
 
