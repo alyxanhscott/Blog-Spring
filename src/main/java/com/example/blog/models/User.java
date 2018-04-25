@@ -3,11 +3,14 @@ package com.example.blog.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
@@ -38,6 +41,14 @@ public class User {
         this.password = password;
         this.posts = posts;
     }
+
+        public User(User copy) {
+            id = copy.id; // This line is SUPER important! Many things won't work if it's absent
+            email = copy.email;
+            username = copy.username;
+            password = copy.password;
+        }
+
 
     public long getId() {
         return id;
