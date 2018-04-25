@@ -1,5 +1,7 @@
 package com.example.blog.models;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,13 +9,15 @@ import javax.persistence.*;
 public class Post {
 
     @Column(nullable = false, length = 100)
+    @NotBlank(message = "The title cannot be blank")
     private String title;
 
     @Column(nullable = false)
+    @NotBlank(message = "The body cannot be blank")
     private String body;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
